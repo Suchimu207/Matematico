@@ -1,11 +1,15 @@
 import os, sys
+from os import environ
+environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+
+import pygame
+from pygame import mixer
 from colorama import just_fix_windows_console, Fore, Back, Style
 from enum import Enum, auto
-from pygame import mixer
 
 """
 Autor: Carlos S. Rehem
-Versão: 0.0.1
+Versão: 0.0.2
 
 Calculadora simples com música de fundo.
 
@@ -14,7 +18,8 @@ Calculadora simples com música de fundo.
 just_fix_windows_console()
 
 mixer.init()
-mixer.music.load("BGM\CastleFunk.mp3")
+mixer.music.load(r"BGM\CastleFunk.mp3")
+mixer.music.play(loops=-1, fade_ms=6000)
 mixer.music.set_volume(0.6)
 
 class EstadosJogo(Enum):
@@ -49,7 +54,7 @@ def menuInicial():
     print(Fore.GREEN + Style.BRIGHT+"           Matemático!"+Style.NORMAL)
     print(Fore.WHITE + Style.BRIGHT+"================================"+Style.NORMAL)
     print(Fore.GREEN + Style.BRIGHT+"Desenvolvido por Carlos S. Rehem"+Style.NORMAL)
-    print(Fore.GREEN + Style.BRIGHT+"Versão: 0.0.1"+Style.NORMAL)
+    print(Fore.GREEN + Style.BRIGHT+"Versão: 0.0.2"+Style.NORMAL)
     
     print("")
     print(Fore.WHITE + Style.BRIGHT+"================================"+Style.NORMAL)
@@ -92,14 +97,15 @@ def menuOperação(estadoAtual):
  
     print("")
     print(Fore.GREEN + Style.BRIGHT+"Resultado:", resultado)
+    print(Fore.WHITE + Style.BRIGHT+"_________________________________________"+Style.NORMAL)
     print(Fore.WHITE + Style.BRIGHT+"\nDeseja voltar para o menu inicial? S/N"+Style.NORMAL)
     entradaTexto = inputTexto((Fore.WHITE + Style.BRIGHT+"> "+Style.NORMAL))
     
-    if "S" in entradaTexto or "s" in entradaTexto:
+    if entradaTexto.upper() == "S":
         return EstadosJogo.PRINCIPAL
     else:
         return estadoAtual
-    
+
 if __name__ == "__main__":
     estadoAtual = EstadosJogo.PRINCIPAL
     mixer.music.play(-1)
@@ -124,10 +130,10 @@ if __name__ == "__main__":
                     estadoAtual = EstadosJogo.MULTIPLICAÇÃO
                 elif entrada == EstadosJogo.DIVISÃO.value:
                     estadoAtual = EstadosJogo.DIVISÃO
-                elif entrada == estadoAtual.SAIR.value:
+                elif entrada == estadoAtual.SAIR.value: 
+                    mixer.music.fadeout(2000)
                     limpaTela()
                     rodando = False
-                    mixer.music.stop()
                     sys.exit(0)
             except ValueError:
                 print(Fore.RED + Style.BRIGHT+"Comando inválido!"+Style.NORMAL)
