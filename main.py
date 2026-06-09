@@ -10,7 +10,7 @@ from menu import Menu
 
 """
 Autor: Carlos S. Rehem
-Versão: 0.0.3
+Versão: 0.0.4
 
 Calculadora simples com música de fundo.
 
@@ -23,6 +23,8 @@ mixer.music.load(r"BGM\CastleFunk.mp3")
 mixer.music.play(loops=-1, fade_ms=3000)
 mixer.music.set_volume(0.6)
 
+valoresAtuais = [0]*2
+
 class EstadosJogo(Enum):
     PRINCIPAL = 0
     ADIÇÃO = auto()
@@ -31,6 +33,7 @@ class EstadosJogo(Enum):
     EXPONENCIAÇÃO = auto()
     DIVISÃO = auto()
     DIVISÃO_INTEIRA = auto()
+    CONFIG = auto()
     SAIR = auto()
 
 def limpaTela():
@@ -51,36 +54,49 @@ def inputTexto(mensagem):
             return texto
         print(Fore.RED + Style.BRIGHT+"\nTexto inválido.\n"+Style.NORMAL)
 
-def menuOperação(estadoAtual):
+def inputEntrada(estadoAtual):
     print(Fore.WHITE + Style.BRIGHT+"Insira o primeiro valor:"+Style.NORMAL)
     valor1 = inputNúmero((Fore.WHITE + Style.BRIGHT+"> "+Style.NORMAL))
-    
     print("")
     
     print(Fore.WHITE + Style.BRIGHT+"Insira o segundo valor:")
     valor2 = inputNúmero((Fore.WHITE + Style.BRIGHT+"> "+Style.NORMAL))
-   
+    
+    valores = [valor1, valor2]
+    return valores
+
+def menuOperação(estadoAtual):
+    resultado = None
+    
     if estadoAtual == EstadosJogo.ADIÇÃO:
-        resultado = valor1 + valor2
+        valoresAtuais = inputEntrada(estadoAtual)
+        resultado = valoresAtuais[0] + valoresAtuais[1]
     elif estadoAtual == EstadosJogo.SUBTRAÇÃO:
-        resultado = valor1 - valor2
+        valoresAtuais = inputEntrada(estadoAtual)
+        resultado = valoresAtuais[0] - valoresAtuais[1]
     elif estadoAtual == EstadosJogo.MULTIPLICAÇÃO:
-        resultado = valor1 * valor2
+        valoresAtuais = inputEntrada(estadoAtual)
+        resultado = valoresAtuais[0] * valoresAtuais[1]
     elif estadoAtual == EstadosJogo.EXPONENCIAÇÃO:
-        resultado = valor1 ** valor2
+        valoresAtuais = inputEntrada(estadoAtual)
+        resultado = valoresAtuais[0] ** valoresAtuais[1]
     elif estadoAtual == EstadosJogo.DIVISÃO:
-        if valor2 > 0:
-            resultado = valor1/valor2 
+        valoresAtuais = inputEntrada(estadoAtual)
+        if valoresAtuais[0] > 0 and valoresAtuais[1] > 0:
+            resultado = valoresAtuais[0]/valoresAtuais[1] 
         else: 
             resultado = 0
     elif estadoAtual == EstadosJogo.DIVISÃO_INTEIRA:
-        if valor2 > 0:
-            resultado = valor1//valor2
+        valoresAtuais = inputEntrada(estadoAtual)
+        if valoresAtuais[0] > 0 and valoresAtuais[1] > 0:
+            resultado = valoresAtuais[0]//valoresAtuais[1]
         else: 
             resultado = 0
     
-    print("")
-    print(Fore.GREEN + Style.BRIGHT+"Resultado:", resultado)
+    if resultado is not None:
+        print("")
+        print(Fore.GREEN + Style.BRIGHT+"Resultado:", resultado)
+        
     print(Fore.WHITE + Style.BRIGHT+"_________________________________________"+Style.NORMAL)
     print(Fore.WHITE + Style.BRIGHT+"\nDeseja voltar para o menu inicial? S/N"+Style.NORMAL)
     entradaTexto = inputTexto((Fore.WHITE + Style.BRIGHT+"> "+Style.NORMAL))
@@ -119,6 +135,8 @@ if __name__ == "__main__":
                     estadoAtual = EstadosJogo.DIVISÃO
                 elif entrada == EstadosJogo.DIVISÃO_INTEIRA.value:
                     estadoAtual = EstadosJogo.DIVISÃO_INTEIRA
+                elif entrada == EstadosJogo.CONFIG.value:
+                    estadoAtual = EstadosJogo.CONFIG
                 elif entrada == estadoAtual.SAIR.value: 
                     mixer.music.fadeout(2000)
                     limpaTela()

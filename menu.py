@@ -11,7 +11,7 @@ class Menu:
         print(Fore.GREEN + Style.BRIGHT+"           Matemático!"+Style.NORMAL)
         print(Fore.WHITE + Style.BRIGHT+"================================"+Style.NORMAL)
         print(Fore.GREEN + Style.BRIGHT+"Desenvolvido por Carlos S. Rehem"+Style.NORMAL)
-        print(Fore.GREEN + Style.BRIGHT+"Versão: 0.0.3"+Style.NORMAL)
+        print(Fore.GREEN + Style.BRIGHT+"Versão: 0.0.4"+Style.NORMAL)
     
         print("")
         print(Fore.WHITE + Style.BRIGHT+"================================"+Style.NORMAL)
